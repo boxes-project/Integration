@@ -11,21 +11,25 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-namespace Boxes.Integration.Process
+namespace Boxes.Integration.Setup.Registrations
 {
-    using System.Collections.Generic;
-    using Extensions;
+    using System;
 
     /// <summary>
-    /// Set the order to process the packages 
+    /// a register context holds all the information required for someone to have complete control
+    /// over a single types registration.
     /// </summary>
-    public interface IProcessOrder : IBoxesExtension
+    /// <typeparam name="TConfiguration">the underlying IoC registration type</typeparam>
+    public class RegisterContext<TConfiguration>
     {
         /// <summary>
-        /// arranges the packages ready to be processed
+        /// the configuration of the underlying IoC registration
         /// </summary>
-        /// <param name="packages">the latest, unprocessed packages</param>
-        /// <returns>the packages in order, ready to be processed</returns>
-        IEnumerable<Package> Arrange(IEnumerable<Package> packages);
+        public TConfiguration Configuration { get; set; }
+
+        /// <summary>
+        /// the type the configuration is for
+        /// </summary>
+        public Type Type { get; set; }
     }
 }

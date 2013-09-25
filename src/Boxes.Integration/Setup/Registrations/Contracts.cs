@@ -11,11 +11,31 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-namespace Boxes.Integration.Extensions
+namespace Boxes.Integration.Setup.Registrations
 {
     /// <summary>
-    /// Extend <see cref="Boxes.Integration"/>,
-    /// this runs before any other package is registered with the applications IoC, to allow room for extensions
+    /// Register with which service contracts
     /// </summary>
-    public interface IBoxesExtension { }
+    public enum Contracts
+    {
+        /// <summary>
+        /// All the interfaces
+        /// </summary>
+        AllInterfaces,
+
+        /// <summary>
+        /// Only the first interface
+        /// </summary>
+        FirstInterface,
+
+        /// <summary>
+        /// With only the class itself
+        /// </summary>
+        SelfOnly,
+
+        /// <summary>
+        /// With only the class itself
+        /// </summary>
+        SelfAndAllInterfaces
+    }
 }

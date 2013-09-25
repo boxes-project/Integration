@@ -11,28 +11,30 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-namespace Boxes.Integration.Tasks
+namespace Boxes.Integration.Exceptions
 {
-    using System.Collections.Generic;
-    using Boxes.Tasks;
+    using System;
+    using Trust.Contexts;
 
-    public abstract class RunOnceBoxesTask<T> : IBoxesTask<T>
+    /// <summary>
+    /// raise this when the application fails trust
+    /// </summary>
+    public class FailedTrustException : Exception
     {
-        private readonly ICollection<T> _handled = new HashSet<T>();
+        /// <summary>
+        /// the context
+        /// </summary>
+        public TrustContext Context { get; private set; }
 
-        public bool CanHandle(T item)
+        public FailedTrustException(TrustContext context)
         {
-            return CanHandleItem(item) && !_handled.Contains(item);
+            Context = context;
         }
 
-        protected abstract bool CanHandleItem(T item);
-
-        public void Execute(T item)
+        public override string Message
         {
-            ExecuteOnItem(item);
-            _handled.Add(item);
+            get { return "{0} was not trusted, please check the context and filters".FormatWith(Context); }
         }
 
-        protected abstract void ExecuteOnItem(T item);
     }
 }

@@ -11,21 +11,28 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-namespace Boxes.Integration.Process
+namespace Boxes.Integration.Trust.Filters
 {
-    using System.Collections.Generic;
-    using Extensions;
+    using System;
+    using Contexts;
+    using Contexts.BoxesExtensions;
 
     /// <summary>
-    /// Set the order to process the packages 
+    /// apply the trust of a type given its package context
     /// </summary>
-    public interface IProcessOrder : IBoxesExtension
+    /// <typeparam name="TContract"></typeparam>
+    public class FuncContractFilter<TContract> : ContractFilter<TContract>
     {
-        /// <summary>
-        /// arranges the packages ready to be processed
-        /// </summary>
-        /// <param name="packages">the latest, unprocessed packages</param>
-        /// <returns>the packages in order, ready to be processed</returns>
-        IEnumerable<Package> Arrange(IEnumerable<Package> packages);
+        private readonly Func<TypeFromPackageTrustContext, bool> _trust;
+
+        public FuncContractFilter(Func<TypeFromPackageTrustContext, bool> trust)
+        {
+            _trust = trust;
+        }
+
+        protected override bool IsTrustedContext(TypeFromPackageTrustContext trustContext)
+        {
+            return _trust(trustContext);
+        }
     }
 }

@@ -11,11 +11,21 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-namespace Boxes.Integration.Extensions
+namespace Boxes.Integration.Setup
 {
+    using Boxes.Tasks;
+
     /// <summary>
-    /// Extend <see cref="Boxes.Integration"/>,
-    /// this runs before any other package is registered with the applications IoC, to allow room for extensions
+    /// this provides a mechanism to create the required boxes tasks for registration
     /// </summary>
-    public interface IBoxesExtension { }
+    /// <typeparam name="TBuilder">the IoC builder</typeparam>
+    public interface IRegistrationTaskMapper<TBuilder>
+    {
+
+        /// <summary>
+        /// create a boxes registration task from the <see cref="RegistrationMeta"/>
+        /// </summary>
+        /// <param name="registration">the registration to be tasked up</param>
+        IBoxesTask<RegistrationContext<TBuilder>> CreateRegisterTask(RegistrationMeta registration);
+    }
 }

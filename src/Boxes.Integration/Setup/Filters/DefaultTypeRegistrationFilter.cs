@@ -11,11 +11,22 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-namespace Boxes.Integration.Extensions
+namespace Boxes.Integration.Setup.Filters
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+
     /// <summary>
-    /// Extend <see cref="Boxes.Integration"/>,
-    /// this runs before any other package is registered with the applications IoC, to allow room for extensions
+    /// the default will return all exported types
     /// </summary>
-    public interface IBoxesExtension { }
+    class DefaultTypeRegistrationFilter : ITypeRegistrationFilter 
+    {
+        public IEnumerable<Type> FilterTypes(Package package)
+        {
+            return package
+                .LoadedAssemblies
+                .SelectMany(x => x.GetExportedTypes());
+        }
+    }
 }

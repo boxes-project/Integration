@@ -11,11 +11,18 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-namespace Boxes.Integration.Extensions
+namespace Boxes.Integration.Factories
 {
     /// <summary>
-    /// Extend <see cref="Boxes.Integration"/>,
-    /// this runs before any other package is registered with the applications IoC, to allow room for extensions
+    /// create an instance of a dependency resolver
     /// </summary>
-    public interface IBoxesExtension { }
+    public interface IDependencyResolverFactory
+    {
+        /// <summary>
+        /// create an instance of a dependency resolver
+        /// </summary>
+        /// <param name="container">the container which the dependency resolver will wrap around</param>
+        /// <returns>a dependency resolver</returns>
+        IDependencyResolver CreateResolver(object container);
+    }
 }

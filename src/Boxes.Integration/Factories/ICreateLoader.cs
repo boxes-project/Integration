@@ -11,11 +11,20 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-namespace Boxes.Integration.Extensions
+namespace Boxes.Integration.Factories
 {
+    using Boxes.Loading;
+
     /// <summary>
-    /// Extend <see cref="Boxes.Integration"/>,
-    /// this runs before any other package is registered with the applications IoC, to allow room for extensions
+    /// create a loader
     /// </summary>
-    public interface IBoxesExtension { }
+    public interface ICreateLoader
+    {
+        /// <summary>
+        /// creates an instance of a loader
+        /// </summary>
+        /// <param name="packageRegistry">the current <see cref="PackageRegistry"/></param>
+        /// <returns>the loader instance</returns>
+        ILoader Ctor(PackageRegistry packageRegistry);
+    }
 }

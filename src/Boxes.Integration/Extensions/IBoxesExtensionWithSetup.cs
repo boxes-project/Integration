@@ -13,17 +13,9 @@
 // limitations under the License.
 namespace Boxes.Integration.Extensions
 {
-    using Tasks;
-
     /// <summary>
-    /// this will load any logic to set the package in a state which it is ready to run. To use you must register <see cref="BootupPackageTask"/>
+    /// Extend <see cref="Boxes.Integration"/>, its similar to the <see cref="IBoxesExtension"/> 
+    /// however these types of extension require some form of setup, <see cref="ISetupBoxesExtension{TConfigure}"/>.
     /// </summary>
-    public interface IPackageBootup
-    {
-        /// <summary>
-        /// initialise the package
-        /// </summary>
-        /// <param name="dependencyResolver"></param>
-        void Load(IDependencyResolver dependencyResolver);
-    }
+    public interface IBoxesExtensionWithSetup : IBoxesExtension { }
 }
