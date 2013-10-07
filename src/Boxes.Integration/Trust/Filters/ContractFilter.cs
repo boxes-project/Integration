@@ -11,11 +11,19 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-namespace Boxes.Integration.Extensions
+namespace Boxes.Integration.Trust.Filters
 {
+    using Contexts.BoxesExtensions;
+
     /// <summary>
-    /// Extend <see cref="Boxes.Integration"/>,
-    /// this runs before any other package is registered with the applications IoC, to allow room for extensions
+    /// filter a contract and include its package as context, inherit this to provide the IsTrustedContext method
     /// </summary>
-    public interface IBoxesExtension { }
+    /// <typeparam name="TContract">contract</typeparam>
+    public abstract class ContractFilter<TContract> : TrustFilterBase<TypeFromPackageTrustContext>
+    {
+        protected override bool CanHandleContext(TypeFromPackageTrustContext context)
+        {
+            return context.Contract.Is<TContract>();
+        }
+    }
 }

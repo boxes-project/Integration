@@ -29,7 +29,7 @@ namespace Boxes.Integration.Process
             //as the packages can expose more than
             //one module, we run a 2 phase (pain)
             var newPackages = packages as List<Package> ?? packages.ToList();
-            foreach (var package in newPackages)
+            foreach (var package in newPackages.Where(x => !_packagesToNodes.ContainsKey(x)))
             {
                 var node = new Node<Package>(package);
                 foreach (var export in package.Manifest.Exports)
@@ -46,6 +46,12 @@ namespace Boxes.Integration.Process
         private Node<Package> SetupNode(Package package)
         {
             var node = _packagesToNodes[package];
+
+            if (node.Dependencies.Any())
+            {
+                return node;
+            }
+
             HashSet<Package> uniquePackages = new HashSet<Package>();
             foreach (var import in package.Manifest.Imports)
             {

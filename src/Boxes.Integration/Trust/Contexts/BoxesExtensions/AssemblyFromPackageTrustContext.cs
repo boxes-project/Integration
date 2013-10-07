@@ -11,25 +11,29 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-namespace Boxes.Integration.Extensions
+namespace Boxes.Integration.Trust.Contexts.BoxesExtensions
 {
-    using Tasks;
+    using System.Reflection;
 
     /// <summary>
-    /// this will run only once, when the package is first installed.
-    /// the migrations logic should be run in this class too. To use you must register <see cref="SetupPackageTask"/>
+    /// check to see if an assembly/module from a package is ok (Boxes Extension)
     /// </summary>
-    public interface IPackageSetup
+    public sealed class AssemblyFromPackageTrustContext : TrustContext
     {
-        /// <summary>
-        /// determines if the Setup method should run
-        /// </summary>
-        bool HasAlreadyBeenSetup { get; }
+        public AssemblyFromPackageTrustContext(Assembly assembly, Package package)
+        {
+            Assembly = assembly;
+            Package = package;
+        }
 
         /// <summary>
-        /// sets up the module ready to be loaded, <see cref="IPackageBootup"/>
+        /// the assembly/module in question
         /// </summary>
-        /// <param name="dependencyResolver">the main container, allow you access to any registered objects</param>
-        void Setup(IDependencyResolver dependencyResolver);
+        public Assembly Assembly { get; set; }
+        
+        /// <summary>
+        /// package the assembly resides in
+        /// </summary>
+        public Package Package { get; set; }
     }
 }

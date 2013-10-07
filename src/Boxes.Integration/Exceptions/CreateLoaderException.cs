@@ -11,11 +11,29 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-namespace Boxes.Integration.Extensions
+namespace Boxes.Integration.Exceptions
 {
+    using System;
+    using Factories;
+
     /// <summary>
-    /// Extend <see cref="Boxes.Integration"/>,
-    /// this runs before any other package is registered with the applications IoC, to allow room for extensions
+    /// there is no <see cref="ICreateLoader"/> registered for this type
     /// </summary>
-    public interface IBoxesExtension { }
+    public class CreateLoaderException : Exception
+    {
+        /// <summary>
+        /// the loader which requires a creator
+        /// </summary>
+        public Type LoaderType { get; private set; }
+
+        public CreateLoaderException(Type loaderType)
+        {
+            LoaderType = loaderType;
+        }
+
+        public override string Message
+        {
+            get { return "{0} - has no ICreateLoader registered ".FormatWith(LoaderType); }
+        }
+    }
 }

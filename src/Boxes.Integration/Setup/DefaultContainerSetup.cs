@@ -11,39 +11,23 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-namespace Boxes.Integration.ContainerSetup
+namespace Boxes.Integration.Setup
 {
-    using System;
+    //TODO:move into the base/default module
 
     /// <summary>
-    /// Register with which service contracts
+    /// the tenants container setup
     /// </summary>
-    public enum Contracts
+    /// <typeparam name="TBuilder">the ioc builder class</typeparam>
+    public interface IDefaultContainerSetup<TBuilder> : IContainerSetup<TBuilder> { }
+
+
+    public class DefaultContainerSetup<TBuilder> : ContainerSetupBase<TBuilder>, IDefaultContainerSetup<TBuilder>
     {
-        /// <summary>
-        /// All the interfaces
-        /// </summary>
-        AllInterfaces,
-
-        /// <summary>
-        /// Only the first interface
-        /// </summary>
-        FirstInterface,
-
-        /// <summary>
-        /// With only the class itself
-        /// </summary>
-        SelfOnly,
-
-        /// <summary>
-        /// With only the class itself
-        /// </summary>
-        SelfAndAllInterfaces
+        public DefaultContainerSetup(IRegistrationTaskMapper<TBuilder> registrationTaskMapper)
+            : base(registrationTaskMapper)
+        {
+        }
     }
 
-    [Obsolete("Use Contracts", true)]
-    public enum RegisterWith
-    {
-        
-    }
 }

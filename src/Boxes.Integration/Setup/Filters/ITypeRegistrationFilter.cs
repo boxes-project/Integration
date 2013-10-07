@@ -11,16 +11,15 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-namespace Boxes.Integration.Setup
+namespace Boxes.Integration.Setup.Filters
 {
     using System;
     using System.Collections.Generic;
-    using System.Linq;
 
     /// <summary>
     /// Filter types which are to be registered with the IoC
     /// </summary>
-    public interface IPackageTypesFilter
+    public interface ITypeRegistrationFilter
     {
         /// <summary>
         /// filter out the types for a package
@@ -29,29 +28,4 @@ namespace Boxes.Integration.Setup
         /// <returns>a set of types which will be used for IoC registration</returns>
         IEnumerable<Type> FilterTypes(Package package);
     }
-
-    public interface IPackageFilter
-    {
-        /// <summary>
-        /// filter out the types for a package
-        /// </summary>
-        /// <param name="package">the package to extract the types from</param>
-        /// <returns>a set of types which will be used for IoC registration</returns>
-        IEnumerable<Package> FilterPackages(IEnumerable<Package> package);
-    }
-
-
-    class DefaultPackageTypesFilter : IPackageTypesFilter 
-    {
-        public IEnumerable<Type> FilterTypes(Package package)
-        {
-            return package
-                    .LoadedAssemblies
-                    .SelectMany(x => x.GetExportedTypes());
-        }
-    }
-
-
-
-
 }

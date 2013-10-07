@@ -11,11 +11,23 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-namespace Boxes.Integration.Extensions
+namespace Boxes.Integration
 {
+    using InternalIoc;
+
     /// <summary>
-    /// Extend <see cref="Boxes.Integration"/>,
-    /// this runs before any other package is registered with the applications IoC, to allow room for extensions
+    /// some extensions for the internal container
     /// </summary>
-    public interface IBoxesExtension { }
+    public static class InternalContainerExtensions
+    {
+        public static void Add<TContract, TService>(this IInternalContainer internalContainer) where TService : TContract
+        {
+            internalContainer.Add(typeof(TContract), typeof(TService));
+        }
+
+        public static TContract Resolve<TContract>(this IInternalContainer internalContainer)
+        {
+            return (TContract)internalContainer.Resolve(typeof(TContract));
+        }
+    }
 }

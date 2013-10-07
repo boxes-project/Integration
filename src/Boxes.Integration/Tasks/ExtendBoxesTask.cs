@@ -14,17 +14,25 @@
 namespace Boxes.Integration.Tasks
 {
     using System;
+    using System.Collections.Generic;
     using System.Linq;
     using Boxes.Tasks;
     using Extensions;
+    using InternalIoc;
+    using Trust;
+    using Trust.Contexts;
+    using Trust.Contexts.BoxesExtensions;
 
     internal class ExtendBoxesTask : IBoxesTask<Package>
     {
-        private readonly IBoxesWrapper _boxesWrapper;
+        private readonly IInternalContainer _container;
+        private readonly ITrustManager _trustManager;
+        private readonly IDictionary<Type, Action<Type, object>> _callSetupCaches = new Dictionary<Type, Action<Type, object>>(); 
 
-        public ExtendBoxesTask(IBoxesWrapper boxesWrapper)
+        public ExtendBoxesTask(IInternalContainer container)
         {
-            _boxesWrapper = boxesWrapper;
+            _container = container;
+            _trustManager = container.Resolve<ITrustManager>();
         }
 
         public bool CanHandle(Package item)
@@ -34,6 +42,11 @@ namespace Boxes.Integration.Tasks
 
         public void Execute(Package item)
         {
+            //1. find assemblies with extensions
+            //2. register types with internal ioc
+            //3. find any extensions which can be configured
+            //4. configure extension
+
             var manifest = (ExtensionManifest)item.Manifest;
             var assemblies = manifest
                 .Extensions
@@ -44,15 +57,69 @@ namespace Boxes.Integration.Tasks
                             {
                                 x.LoadFromFile();
                             }
+                            _trustManager.IsTrusted(new AssemblyFromPackageTrustContext(x.Assembly, item));
                             return x.Assembly;
                         });
 
-            var types = assemblies.SelectMany(x => x.GetExportedTypes()).Where(x=> typeof(IBoxesExtension).IsAssignableFrom(x));
+            var types = assemblies.SelectMany(x => x.GetExportedTypes()).ToArray();
 
-            foreach(var type in types)
+            foreach (var service in types.Where(x => typeof(IBoxesExtension).IsAssignableFrom(x)))
             {
-                var extension = (IBoxesExtension)Activator.CreateInstance(type);
-                extension.Extend(_boxesWrapper);
+                var contract = service.FirstInterface();
+                _trustManager.IsTrusted(new TypeFromPackageTrustContext(contract, service, item));
+                _container.Add(contract, service);
+            }
+
+
+            var setupExtensionType = typeof(ISetupBoxesExtension<>);
+
+            //painful code follows
+            foreach (var setup in types.Where(x => !x.IsAbstract && x.IsClass))
+            {
+                //filter out types we are not interested with
+                var setupInterface = setup
+                    .AllInterfaces()
+                    .FirstOrDefault(x =>
+                                    x.IsGenericType
+                                    && x.GetGenericTypeDefinition().IsAssignableFrom(setupExtensionType));
+
+                if (setupInterface == null)
+                {
+                    continue;
+                }
+
+                //try to get the interface so we can resolve the correct type. (there will be some limitations)
+                Type directContract = setupInterface.GetGenericArguments()[0];
+                Type contractInterface = directContract.IsInterface
+                                             ? directContract
+                                             : directContract.FirstInterface();
+                
+                //run trust against the interface, as it will be this type which will be used to resolve the
+                //type with the internal ioc
+                _trustManager.IsTrusted(new SetupFromPackageTrustContext(contractInterface, setup, item));
+
+                //get the service, and set it up
+                Action<Type, object> callSetup;
+                if (!_callSetupCaches.TryGetValue(directContract, out callSetup))
+                {
+                    //lame try to minimise the amount of reflection being recalled.
+                    var configureMethodInfo = setupExtensionType.MakeGenericType(new[] { directContract }).GetMethod("Configure");
+                    var handleMethodInfo = setupExtensionType.MakeGenericType(new[] { directContract }).GetMethod("CanHandle");
+                    
+                    callSetup =
+                        (setupType, serviceInstance) =>
+                        {
+                            var instance = Activator.CreateInstance(setupType);
+                            var canHandle = (bool)handleMethodInfo.Invoke(instance, new[] { serviceInstance });
+                            if (canHandle)
+                            {
+                                configureMethodInfo.Invoke(instance, new[] { serviceInstance });    
+                            }
+                        };
+                }
+
+                var service = _container.Resolve(contractInterface);
+                callSetup(setup, service);
             }
         }
     }

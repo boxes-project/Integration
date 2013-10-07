@@ -11,11 +11,27 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-namespace Boxes.Integration.Extensions
+namespace Boxes.Integration.Factories
 {
+    using System;
+    using Loading;
+
     /// <summary>
-    /// Extend <see cref="Boxes.Integration"/>,
-    /// this runs before any other package is registered with the applications IoC, to allow room for extensions
+    /// creates a Loader, based on a Func which is passed in via the ctor
     /// </summary>
-    public interface IBoxesExtension { }
+    /// <typeparam name="TLoader"></typeparam>
+    public class FuncCreateLoader<TLoader> : ICreateLoader where TLoader : ILoader
+    {
+        private readonly Func<PackageRegistry, TLoader> _ctor;
+
+        public FuncCreateLoader(Func<PackageRegistry, TLoader> ctor) 
+        {
+            _ctor = ctor;
+        }
+
+        public ILoader Ctor(PackageRegistry packageRegistry)
+        {
+            return _ctor(packageRegistry);
+        }
+    }
 }

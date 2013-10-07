@@ -11,11 +11,26 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-namespace Boxes.Integration.Extensions
+namespace Boxes.Integration
 {
+    using System;
+
     /// <summary>
-    /// Extend <see cref="Boxes.Integration"/>,
-    /// this runs before any other package is registered with the applications IoC, to allow room for extensions
+    /// object level extensions
     /// </summary>
-    public interface IBoxesExtension { }
+    public static class ObjectExtensions
+    {
+        /// <summary>
+        /// this will try to dispose of the current object, it will run the IDosable interface, if it is implemented
+        /// </summary>
+        /// <param name="obj">the object to try to dispose of</param>
+        public static void TryDispose(this object obj)
+        {
+            var disposable = obj as IDisposable;
+            if (disposable != null)
+            {
+                disposable.Dispose();
+            }
+        }
+    }
 }

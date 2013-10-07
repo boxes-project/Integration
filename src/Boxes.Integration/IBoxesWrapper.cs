@@ -14,43 +14,30 @@
 namespace Boxes.Integration
 {
     using System;
-    using ContainerSetup;
     using Discovering;
     using Loading;
     using Setup;
+    using Trust;
 
     /// <summary>
     /// takes Boxes and extends it to provide lifestyle management with Dependency Injection along with the (isolated) module loading
     /// </summary>
-    public interface IBoxesWrapper : IDisposable
+    /// <remarks>
+    /// the generic type is require to help the extension methods, do not get rid of it
+    /// </remarks>
+    public interface IBoxesWrapper<TBuilder> : IDisposable
     {
         /// <summary>
         /// package registry, this will provide the information of what modules have been loaded
         /// </summary>
         PackageRegistry PackageRegistry { get; }
-
-        /// <summary>
-        /// A mechanism to handle type registration with the underlying IoC container.
-        /// </summary>
-        IBoxesContainerSetup BoxesContainerSetup { get; }
-
-        /// <summary>
-        /// A mechanism to modify/extend the <see cref="LoadPackages"/> process 
-        /// </summary>
-        IBoxesIntegrationSetup BoxesIntegrationSetup { get; }
-
-        /// <summary>
-        /// The Dependency resolver
-        /// </summary>
-        IDependencyResolver DependencyResolver { get; }
-
+        
         /// <summary>
         /// Setup Boxes with the <see cref="ILoader"/> and default <see cref="IPackageScanner"/> 
         /// </summary>
         /// <typeparam name="TLoader">the type of the loader to use with boxes</typeparam>
         /// <param name="defaultPackageScanner">the default scanner to use to find modules with</param>
-        void Setup<TLoader>(IPackageScanner defaultPackageScanner)
-            where TLoader : ILoader;
+        void Setup<TLoader>(IPackageScanner defaultPackageScanner) where TLoader : ILoader;
 
         /// <summary>
         /// Discover packages, using a supplied <see cref="IPackageScanner"/>
@@ -67,5 +54,26 @@ namespace Boxes.Integration
         /// Load packages ready for the application to use
         /// </summary>
         void LoadPackages();
+
+        /// <summary>
+        /// get an internal service
+        /// </summary>
+        /// <typeparam name="T">The service to return</typeparam>
+        /// <returns>null if it it does not exist</returns>
+        T GetService<T>();
+    }
+
+    /// <summary>
+    /// extensions for the boxes wrapper
+    /// </summary>
+    public static class BoxesWrapperExtensions
+    {
+        /// <summary>
+        /// the trust manager being used by boxes.
+        /// </summary>
+        public static ITrustManager TrustManager<TBuilder>(this IBoxesWrapper<TBuilder> boxes)
+        {
+            return boxes.GetService<ITrustManager>();
+        }
     }
 }

@@ -11,21 +11,32 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-namespace Boxes.Integration.Process
+namespace Boxes.Integration.Setup
 {
-    using System.Collections.Generic;
-    using Extensions;
+    using System;
+
+    //TODO: keep an eye on the use of this class, look at some profiling
 
     /// <summary>
-    /// Set the order to process the packages 
+    /// the context for the registration
     /// </summary>
-    public interface IProcessOrder : IBoxesExtension
+    /// <typeparam name="TBuilder">the current builder</typeparam>
+    public class RegistrationContext<TBuilder>
     {
+        public RegistrationContext(Type type, TBuilder builder)
+        {
+            Type = type;
+            Builder = builder;
+        }
+
         /// <summary>
-        /// arranges the packages ready to be processed
+        /// the type to register
         /// </summary>
-        /// <param name="packages">the latest, unprocessed packages</param>
-        /// <returns>the packages in order, ready to be processed</returns>
-        IEnumerable<Package> Arrange(IEnumerable<Package> packages);
+        public Type Type { get; set; }
+
+        /// <summary>
+        /// the builder to register it with
+        /// </summary>
+        public TBuilder Builder { get; set; }
     }
 }

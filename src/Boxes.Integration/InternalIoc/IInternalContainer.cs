@@ -11,11 +11,19 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-namespace Boxes.Integration.Extensions
+namespace Boxes.Integration.InternalIoc
 {
+    using System;
+
     /// <summary>
-    /// Extend <see cref="Boxes.Integration"/>,
-    /// this runs before any other package is registered with the applications IoC, to allow room for extensions
+    /// A simple internal container, which will manage the services available in Boxes.
     /// </summary>
-    public interface IBoxesExtension { }
+    public interface IInternalContainer : IDisposable
+    {
+        void Add(Type contract, Type service);
+        
+        void setInstance(Type type, object instance);
+
+        object Resolve(Type contract);
+    }
 }
