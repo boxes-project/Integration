@@ -5,6 +5,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Boxes.Integration", "Boxes.
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{0733A87B-C669-461C-A0FE-A9BF85F841B2}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Boxes.Integration.Test", "Boxes.Integration.Test\Boxes.Integration.Test.csproj", "{356B6CFA-EFEA-43DA-83DD-C2093F3818DD}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,8 +17,15 @@ Global
 		{4D3CC463-A3C6-4569-BC00-A5C5D5A2DDD2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4D3CC463-A3C6-4569-BC00-A5C5D5A2DDD2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4D3CC463-A3C6-4569-BC00-A5C5D5A2DDD2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{356B6CFA-EFEA-43DA-83DD-C2093F3818DD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{356B6CFA-EFEA-43DA-83DD-C2093F3818DD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{356B6CFA-EFEA-43DA-83DD-C2093F3818DD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{356B6CFA-EFEA-43DA-83DD-C2093F3818DD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{356B6CFA-EFEA-43DA-83DD-C2093F3818DD} = {0733A87B-C669-461C-A0FE-A9BF85F841B2}
 	EndGlobalSection
 EndGlobal
