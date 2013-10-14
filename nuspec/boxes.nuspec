@@ -4,14 +4,15 @@
         <id>Boxes.Integration</id>
         <version>0.0.0</version>
         <title>Boxes Integration</title>
-        <authors>David Rundle</authors>
+        <authors>Boxes Contrib Team</authors>
         <owners>dbones.co.uk</owners>
+		<iconUrl>http://docs.dbones.co.uk/GetFile.aspx?File=/boxes/logo/boxeslogo.jpg</iconUrl>
         <licenseUrl>http://opensource.org/licenses/Apache-2.0</licenseUrl>
         <projectUrl>https://github.com/boxes-project</projectUrl>
         <requireLicenseAcceptance>false</requireLicenseAcceptance>
         <description>Boxes.Integration utilises Boxes.Core to provide an API to integrate with an IoC container.</description>
         <summary>Boxes.Integration utilises Boxes.Core to provide an API to integrate with an IoC container.</summary>
-        <copyright>Copyright 2012 - 2013 dbones.co.uk (David Rundle)</copyright>
+        <copyright>Copyright 2012 - 2013 dbones.co.uk</copyright>
         <language>es-US</language>
         <tags>Composition Plugin Module Modular Package Bundle Isolated ioc di inversionofcontrol dependencyinjection</tags>
         <dependencies>

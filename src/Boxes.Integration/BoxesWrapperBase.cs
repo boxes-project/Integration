@@ -1,4 +1,4 @@
-// Copyright 2012 - 2013 dbones.co.uk (David Rundle)
+// Copyright 2012 - 2013 dbones.co.uk
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -19,6 +19,7 @@ namespace Boxes.Integration
     using InternalIoc;
     using Loading;
     using Process;
+    using Setup;
     using Tasks;
     using Trust;
 
@@ -29,7 +30,7 @@ namespace Boxes.Integration
     /// <typeparam name="TContainer">the type of the container, this will be used to resolve the instances</typeparam>
     /// <remarks>
     /// do not remove the TContainer this is used with the extension methods and with the other classes in the system</remarks>
-    public abstract class BoxesWrapperBase<TBuilder, TContainer> : IBoxesWrapper<TBuilder>
+    public abstract class BoxesWrapperBase<TBuilder, TContainer> : IBoxesWrapper<TBuilder, TContainer>
     {
         //TODO: look at disabling registrations (controllable in a module) 
         //http://ayende.com/blog/2792/introducing-monorail-hotswap 
@@ -60,18 +61,27 @@ namespace Boxes.Integration
         {
             _internalContainer = new InternalInternalContainer();
             PackageRegistry = new PackageRegistry();
-            _extensionRunner = new TaskRunner<Package>(new ExtendBoxesTask(_internalContainer));
             _loaderFactory = new LoaderFactory();
 
             //setup the internal IoC
+            _internalContainer.Add<PackageRegistry, PackageRegistry>();
+            _internalContainer.setInstance(typeof(PackageRegistry), PackageRegistry);
+            
             _internalContainer.Add<IProcessOrder, TopologicalProcessOrder>();
             _internalContainer.Add(typeof(IIocSetup<>), typeof(IocSetup<>));
             _internalContainer.Add<ITrustManager, TrustManager>();
 
             _internalContainer.Add<LoaderFactory, LoaderFactory>();
             _internalContainer.setInstance(typeof(LoaderFactory), _loaderFactory);
+            
+            //this is a default impl, it could be overriden in a module by another interface/impl
+            _internalContainer.Add(typeof(IDefaultContainerSetup<>), typeof(DefaultContainerSetup<>));
+
 
             Initialize(_internalContainer);
+
+            _extensionRunner = new TaskRunner<Package>(new ExtendBoxesTask(_internalContainer));
+            
         }
 
         public PackageRegistry PackageRegistry { get; private set; }

@@ -1,3 +1,11 @@
+0.3.x
+==============
+Support for other IoC container
+Trust manager
+External modules can override Boxes Intergration internals
+Build Foundation for Tenancy
+
+
 0.2.x
 ==============
 updated to support 0.2 versions of Core and Integration projects

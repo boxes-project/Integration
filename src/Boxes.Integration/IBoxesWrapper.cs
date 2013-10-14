@@ -1,4 +1,4 @@
-// Copyright 2012 - 2013 dbones.co.uk (David Rundle)
+// Copyright 2012 - 2013 dbones.co.uk
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -25,7 +25,7 @@ namespace Boxes.Integration
     /// <remarks>
     /// the generic type is require to help the extension methods, do not get rid of it
     /// </remarks>
-    public interface IBoxesWrapper<TBuilder> : IDisposable
+    public interface IBoxesWrapper<TBuilder,TContainer> : IDisposable
     {
         /// <summary>
         /// package registry, this will provide the information of what modules have been loaded
@@ -71,9 +71,12 @@ namespace Boxes.Integration
         /// <summary>
         /// the trust manager being used by boxes.
         /// </summary>
-        public static ITrustManager TrustManager<TBuilder>(this IBoxesWrapper<TBuilder> boxes)
+        public static ITrustManager TrustManager<TBuilder, TContainer>(this IBoxesWrapper<TBuilder, TContainer> boxes)
         {
             return boxes.GetService<ITrustManager>();
         }
+
+
+
     }
 }
