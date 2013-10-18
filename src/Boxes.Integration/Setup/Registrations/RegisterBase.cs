@@ -23,7 +23,7 @@ namespace Boxes.Integration.Setup.Registrations
     /// note this is abstract, it is inherited by the container implementation, 
     /// this was to make the API easier to work with 
     /// IE new Register() VS new Register[Type, WindsorContainer]() 
-    /// the latter is not do friendly
+    /// the latter is not friendly to do
     /// </remarks>
     public abstract class RegisterBase<TScope, TConfiguration> : IRegister<TScope, TConfiguration>
     {

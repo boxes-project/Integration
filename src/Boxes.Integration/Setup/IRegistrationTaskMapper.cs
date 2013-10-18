@@ -14,6 +14,8 @@
 namespace Boxes.Integration.Setup
 {
     using Boxes.Tasks;
+    using Filters;
+    using Interception;
 
     /// <summary>
     /// this provides a mechanism to create the required boxes tasks for registration
@@ -21,6 +23,11 @@ namespace Boxes.Integration.Setup
     /// <typeparam name="TBuilder">the IoC builder</typeparam>
     public interface IRegistrationTaskMapper<TBuilder>
     {
+        /// <summary>
+        /// set the interceptor selector which can be used with the registration task
+        /// </summary>
+        /// <param name="interceptionSelector">the registration selector</param>
+        void SetInterceptionSelector(IInterceptionSelector interceptionSelector);
 
         /// <summary>
         /// create a boxes registration task from the <see cref="RegistrationMeta"/>

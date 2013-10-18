@@ -1,4 +1,4 @@
-// Copyright 2012 - 2013 dbones.co.uk
+﻿// Copyright 2012 - 2013 dbones.co.uk
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -11,21 +11,24 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-namespace Boxes.Integration.Setup
+namespace Boxes.Integration.Setup.Interception
 {
+    using System;
+    using System.Collections.Generic;
+
     /// <summary>
-    /// default container setup
+    /// contains information about an interception context
     /// </summary>
-    /// <typeparam name="TBuilder">the ioc builder class</typeparam>
-    public interface IDefaultContainerSetup<TBuilder> : IContainerSetup<TBuilder> { }
-
-
-    public class DefaultContainerSetup<TBuilder> : ContainerSetupBase<TBuilder>, IDefaultContainerSetup<TBuilder>
+    public class InterceptionContext
     {
-        public DefaultContainerSetup(IRegistrationTaskMapper<TBuilder> registrationTaskMapper)
-            : base(registrationTaskMapper)
-        {
-        }
-    }
+        /// <summary>
+        /// the contracts which we have registered the service with
+        /// </summary>
+        public IEnumerable<Type> Contracts { get; set; }
 
+        /// <summary>
+        /// the concrete service which will satisfy the contract
+        /// </summary>
+        public Type Service { get; set; }
+    }
 }

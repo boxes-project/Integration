@@ -17,6 +17,7 @@ namespace Boxes.Integration.Setup
     using Boxes.Tasks;
     using Extensions;
     using Filters;
+    using Interception;
     using Registrations;
 
     /// <summary>
@@ -28,6 +29,12 @@ namespace Boxes.Integration.Setup
         /// the default filter to find exported classes with
         /// </summary>
         ITypeRegistrationFilter DefaultTypeRegistrationFilter { get; }
+
+        /// <summary>
+        /// add an interceptor/aspect to the container
+        /// </summary>
+        /// <param name="registerInterception">the registration</param>
+        void AddInterception(IRegisterInterception registerInterception);
 
         /// <summary>
         /// Register a type (can be as simple as does it implement a Dependency or to apply a filter)

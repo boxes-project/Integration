@@ -16,6 +16,7 @@ namespace Boxes.Integration.Setup
     using System.Collections.Generic;
     using Boxes.Tasks;
     using Filters;
+    using Interception;
     using Registrations;
 
     /// <summary>
@@ -27,10 +28,12 @@ namespace Boxes.Integration.Setup
         private readonly IRegistrationTaskMapper<TBuilder> _registrationTaskMapper;
         private readonly List<IBoxesTask<RegistrationContext<TBuilder>>> _registraionTasks = new List<IBoxesTask<RegistrationContext<TBuilder>>>();
         private readonly Dictionary<string, ITypeRegistrationFilter> _packageTypeFilters;
+        private readonly List<InterceptorMeta> _interceptorMetas = new List<InterceptorMeta>();  
 
         protected ContainerSetupBase(IRegistrationTaskMapper<TBuilder> registrationTaskMapper)
         {
             _registrationTaskMapper = registrationTaskMapper;
+            _registrationTaskMapper.SetInterceptionSelector(new InterceptionSelector(_interceptorMetas));
             _packageTypeFilters = new Dictionary<string, ITypeRegistrationFilter>();
             DefaultTypeRegistrationFilter = new DefaultTypeRegistrationFilter();
         }
@@ -44,6 +47,12 @@ namespace Boxes.Integration.Setup
             ITypeRegistrationFilter filter;
             _packageTypeFilters.TryGetValue(packageName, out filter);
             return filter;
+        }
+
+        public void AddInterception(IRegisterInterception registerInterception)
+        {
+            var intercetionRegistrations = registerInterception.InterceptorMetas;
+            _interceptorMetas.AddRange(intercetionRegistrations);
         }
 
         public void AddRegistration(IRegister registration)

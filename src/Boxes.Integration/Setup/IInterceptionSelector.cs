@@ -1,4 +1,4 @@
-// Copyright 2012 - 2013 dbones.co.uk
+﻿// Copyright 2012 - 2013 dbones.co.uk
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -13,19 +13,20 @@
 // limitations under the License.
 namespace Boxes.Integration.Setup
 {
+    using System;
+    using System.Collections.Generic;
+    using Interception;
+
     /// <summary>
-    /// default container setup
+    /// the selector will indicate what interceptors to apply on a given registration
     /// </summary>
-    /// <typeparam name="TBuilder">the ioc builder class</typeparam>
-    public interface IDefaultContainerSetup<TBuilder> : IContainerSetup<TBuilder> { }
-
-
-    public class DefaultContainerSetup<TBuilder> : ContainerSetupBase<TBuilder>, IDefaultContainerSetup<TBuilder>
+    public interface IInterceptionSelector
     {
-        public DefaultContainerSetup(IRegistrationTaskMapper<TBuilder> registrationTaskMapper)
-            : base(registrationTaskMapper)
-        {
-        }
+        /// <summary>
+        /// find the interceptor types to apply on a registration
+        /// </summary>
+        /// <param name="ctx">contains all the inforamtion required to see which interceptor types will be returned</param>
+        /// <returns>a distinct list of interceptor types</returns>
+        IEnumerable<Type> InterceptorsToApply(InterceptionContext ctx);
     }
-
 }

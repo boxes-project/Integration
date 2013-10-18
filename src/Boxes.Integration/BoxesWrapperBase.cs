@@ -59,8 +59,8 @@ namespace Boxes.Integration
 
         protected BoxesWrapperBase()
         {
-            _internalContainer = new InternalInternalContainer();
             PackageRegistry = new PackageRegistry();
+            _internalContainer = new InternalInternalContainer();
             _loaderFactory = new LoaderFactory();
 
             //setup the internal IoC
@@ -71,8 +71,10 @@ namespace Boxes.Integration
             _internalContainer.Add(typeof(IIocSetup<>), typeof(IocSetup<>));
             _internalContainer.Add<ITrustManager, TrustManager>();
 
+            _internalContainer.Add(typeof (IProxyFactory<>), typeof (ProxyFactory));
             _internalContainer.Add<LoaderFactory, LoaderFactory>();
             _internalContainer.setInstance(typeof(LoaderFactory), _loaderFactory);
+
             
             //this is a default impl, it could be overriden in a module by another interface/impl
             _internalContainer.Add(typeof(IDefaultContainerSetup<>), typeof(DefaultContainerSetup<>));

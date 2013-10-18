@@ -17,6 +17,7 @@
         <tags>Composition Plugin Module Modular Package Bundle Isolated ioc di inversionofcontrol dependencyinjection</tags>
         <dependencies>
             <dependency id="Boxes.Core" version="*" />
+			<dependency id="Castle.Core" version="3.2.0"/>
         </dependencies>
 	</metadata>
 	<files>

@@ -1,10 +1,13 @@
+0.4.x
+==============
+AOP support
+
 0.3.x
 ==============
 Support for other IoC container
-Trust manager
 External modules can override Boxes Intergration internals
 Build Foundation for Tenancy
-
+Trust manager
 
 0.2.x
 ==============

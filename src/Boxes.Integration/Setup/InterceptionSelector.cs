@@ -1,4 +1,4 @@
-// Copyright 2012 - 2013 dbones.co.uk
+﻿// Copyright 2012 - 2013 dbones.co.uk
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -13,19 +13,23 @@
 // limitations under the License.
 namespace Boxes.Integration.Setup
 {
-    /// <summary>
-    /// default container setup
-    /// </summary>
-    /// <typeparam name="TBuilder">the ioc builder class</typeparam>
-    public interface IDefaultContainerSetup<TBuilder> : IContainerSetup<TBuilder> { }
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using Interception;
 
-
-    public class DefaultContainerSetup<TBuilder> : ContainerSetupBase<TBuilder>, IDefaultContainerSetup<TBuilder>
+    public class InterceptionSelector : IInterceptionSelector
     {
-        public DefaultContainerSetup(IRegistrationTaskMapper<TBuilder> registrationTaskMapper)
-            : base(registrationTaskMapper)
+        private readonly IEnumerable<InterceptorMeta> _interceptorMetas;
+
+        public InterceptionSelector(IEnumerable<InterceptorMeta> interceptorMetas)
         {
+            _interceptorMetas = interceptorMetas;
+        }
+
+        public IEnumerable<Type> InterceptorsToApply(InterceptionContext ctx)
+        {
+            return _interceptorMetas.Where(x => x.Where(ctx)).Select(x=> x.Interceptor).Distinct();
         }
     }
-
 }

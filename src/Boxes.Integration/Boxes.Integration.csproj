@@ -36,6 +36,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\lib\Boxes.Core.dll</HintPath>
     </Reference>
+    <Reference Include="Castle.Core">
+      <HintPath>..\packages\Castle.Core.3.2.0\lib\net40-client\Castle.Core.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -53,6 +56,14 @@
     <Compile Include="InternalContainerExtensions.cs" />
     <Compile Include="InternalIoc\InternalInternalContainer.cs" />
     <Compile Include="Setup\Filters\DefaultTypeRegistrationFilter.cs" />
+    <Compile Include="Setup\IInterceptionSelector.cs" />
+    <Compile Include="Setup\Interception\InterceptionContext.cs" />
+    <Compile Include="Setup\InterceptionSelector.cs" />
+    <Compile Include="Setup\Interception\InterceptorMeta.cs" />
+    <Compile Include="Factories\IProxyFactory.cs" />
+    <Compile Include="Setup\Interception\IRegisterInterception.cs" />
+    <Compile Include="Factories\ProxyFactory.cs" />
+    <Compile Include="Setup\Interception\RegisterInterception.cs" />
     <Compile Include="Setup\IRegistrationTaskMapper.cs" />
     <Compile Include="Setup\DefaultContainerSetup.cs" />
     <Compile Include="Exceptions\ServiceTypeDoesNotMatchInstanceException.cs" />
@@ -107,6 +118,7 @@
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
