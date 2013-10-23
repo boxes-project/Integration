@@ -34,7 +34,6 @@ namespace Boxes.Integration.Tasks
         /// </summary>
         public PipelineExecutorWrapper()
         {
-            UpdateTasksAsRequired();
         }
 
         /// <summary>
@@ -44,6 +43,7 @@ namespace Boxes.Integration.Tasks
         public PipelineExecutorWrapper(IEnumerable<IBoxesTask<T>> tasks) : this()
         {
             _tasks = tasks as ICollection<IBoxesTask<T>> ?? tasks.ToList();
+            UpdateTasksAsRequired();
         }
 
         /// <summary>
